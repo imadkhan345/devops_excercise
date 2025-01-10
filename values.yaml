@@ -1,0 +1,60 @@
+# Default values for menr-app helm demo example.
+
+replicaCount: 1
+
+mongodb:
+  container:
+    port: 27017 
+    image:
+      repository: mongo
+      tag: latest
+  service:
+    port: 27017
+    targetPort: 27017
+    protocol: TCP
+
+mongoExpress:
+  container: 
+    port: 8081
+    image:
+      repository: mongo-express
+      tag: latest
+  service:
+    type: LoadBalancer
+    #nodePort: 30100
+    port: 8081
+    targetPort: 8081
+    protocol: TCP
+
+noteServer: 
+  container: 
+    port: 5000
+    image:
+      repository: ghcr.io/ananya2001-an/note-server
+      tag: latest
+    dbName: my-db
+    dbServer: mongodb-service
+  service:
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
+
+noteApp:
+  container: 
+    port: 80
+    image:
+      repository: ghcr.io/ananya2001-an/note
+      tag: latest
+  service:
+    type: LoadBalancer
+    #nodePort: 30101
+    port: 3000
+    targetPort: 80
+    protocol: TCP
+
+secrets:
+  mongoUser: admin
+  mongoPassword: pass
+
+config:
+  mongoUrl: mongodb-service
